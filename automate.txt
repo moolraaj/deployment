@@ -1,0 +1,716 @@
+
+------- deploye next js ------
+
+install plugings----
+
+first verify all installed or not
+
+
+check all
+nginx -v
+node -v
+npm -v
+git --version
+pm2 --version
+
+
+ first run the below command
+
+----- sudo apt update
+------ sudo apt upgrade
+
+
+
+then install 
+
+---  sudo apt install nginx
+
+----sudo apt install git
+
+
+install node js
+
+-----   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - &&\
+------  sudo apt-get install -y nodejs
+
+
+install pm2 
+
+----- sudo npm install -g pm2@latest
+
+
+add its startup  if server restart thn automatically restart pm2
+
+
+-----  sudo pm2 startup
+
+------ pm2 save
+
+
+
+then check nginx  status
+
+--- sudo service nginx status
+
+
+
+
+
+-------  setup firewall in hostinger vps ----
+
+
+
+ufw allow / deny for server requests
+
+--- run ufw first
+
+full form uncomplicated firewall
+
+first install 
+
+--- apt install ufw
+
+--- afw status (to check status) active or inactive
+
+then enable/disable firewall
+ then press 'y' to proceed
+
+
+---- ufw enable 
+
+---- ufw disable
+
+
+after enable not exit allow rule to ssh to connect with server
+
+add rule for ssh
+
+--- sudo afw allow ssh  or  afw allow ssh
+
+
+to check ufw status using
+
+----  ufw status verbose
+----  ufw status numbered
+
+
+if IPV6 is bydefault no 
+
+
+go to ---  nano /etc/default/ufw
+
+and IPV6= yes do this yes 
+
+
+stop firewall using ---ufw disable
+
+run firewall using ----ufw enable
+
+
+
+to check all port which is currently opning
+
+using this --- netstat -tulpn
+
+
+---how to allow port
+ufw allow port/protocol
+
+ufw allow 21/tcp
+ 
+-- how to deny port 
+ufw deny port/protocol
+
+ufw deny 21/tcp
+
+--- how to allow/deny services
+
+ufw allow http
+ufw deny http
+
+--- how to allow range of the port means 1 to 100
+
+ufw allow 20:100/tcp
+
+
+
+--- how to allow ip address 
+
+Syntax:- ufw allow from IPAddress
+Example:- ufw allow from 192.168.1.4
+
+
+--- allow/deny ip who excess on the specifi port
+
+
+Syntax:- ufw allow from IPAdress to any port Port
+Example:- ufw allow from 192.168.1.4 to any port 45
+
+
+
+----how to delete afw rule by number
+
+--- ufw status numbered
+
+---- ufw delete 1 deny/allow
+ 
+
+
+
+reset default setting of the afw
+
+----  ufw reset
+
+its goes to inactive
+
+--- afw allow ssh
+
+--- afw enable
+ 
+
+
+command command to use all
+
+ufw status verbode
+
+allow/deny all 
+
+ufw allow 22/tcp
+ufw allow ssh
+ufw allow 80/tcp
+ufw allow ftp
+ufw allow 21/tcp
+ufw allow 20/tcp
+ufw allow https/http
+ufw allow www
+
+exit
+ 
+
+
+-------- install mongodb in hostinger vps 
+
+
+ 
+
+
+check version first
+
+mongod --version  
+
+-- 
+  wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+--
+ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+
+sudo apt update
+
+sudo apt upgrade
+
+sudo apt install mongodb-org
+
+
+ -- atp update
+-- atp upgrade
+
+
+then install mongodb 
+
+--- sudo apt install mongodb-org
+
+verify mongodb version
+
+---  mongod --version  
+
+enable mongodb if by change server restarts
+
+--- sudo systemctl enable mongod
+
+
+then start mongodb
+
+first check status
+
+--- sudo service mongod status 
+
+now start mongodb
+
+--- sudo service mongod start
+
+
+config of the mongodb
+
+
+go to -- 
+
+mongosh
+
+add configurations
+
+---  sudo nano /etc/mongod.conf
+
+security:
+  authorization: enabled
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+then check ufw status
+
+--  sudo ufw status verbose
+
+
+then allow mongodb to afw 
+
+-- sudo ufw allow 27017
+
+
+then restart mongodb  if any change in the mongodb config file
+
+-- sudo service mongod restart
+
+
+check remote connection is run or not
+
+-- sudo lsof -i | grep mongo
+
+(LISTEN) well
+
+
+exit
+
+
+
+--------- then set domain ------------
+
+Type	Host/Name	Value
+A	@	Your Remote Server IP
+A	www	Your Remote Server IP
+AAAA	@	Your Remote Server IPv6
+AAAA	www	Your Remote Server IPv6
+
+
+
+
+
+
+
+
+
+
+
+
+----- push git-------
+
+
+
+
+
+
+
+--------- ssl certificate --------
+for https:
+
+how to add this https: in the domain  like mytravplan.com
+
+use certbort
+
+copy this 
+
+-----sudo apt install certbot python3-certbot-nginx
+
+------ sudo ufw status verbose
+
+------ sudo certbot --nginx -d http://mytravplan.com  -d www.mytravplan.com
+
+thn YES thn No
+
+then cehck of certbort
+
+use this command ----- sudo systemctl status certbot.timer
+
+show status active 
+
+
+to cehck the status of the certbort files
+
+cd /etc/nginx   ---ls
+
+cd sites-available  --- ls
+
+then open file using this command
+
+sudo nano mytravplan.com  domain name to cehck about ssl certificate
+
+ctrl X to out
+
+also check here
+
+cd ../sites-enabled/
+
+
+default  mytravplan.com see both
+
+ to check the same thing about the ssl certificate
+
+using nano mytravplan.com and ctrl X to out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------  upload local project into production using github  ----
+
+
+make connextion between remote server and ssh key
+
+ssh-keygen -t ed25519 -C "github" ---- identityfire
+
+created this in root .ssh/id_ed25519 and id_ed25519_pub
+
+then root --- ssh --- copy public_key  id_ed25519_pub
+
+then create a public key using cat id_ed25519_pub and copy this 
+
+git repo---settings--deploye-keys
+
+add keys paste and check the allow excess writes here and save
+
+--- clone project to remote server 
+git clone ssh path not https
+
+
+
+--- then create virtual host file
+
+keep in current dir 
+
+root ---nested
+
+cd /etc/nginx/sites-available   ---ls
+default
+
+sudo nano domain_name 
+
+
+then paste this
+
+server{
+    listen 80;
+    listen [::]:80;
+    server_name mytravplan.com www.mytravplan.com;  like this
+    location / {
+       proxy_pass http://localhost:3001;
+       proxy_http_version 1.1;
+       proxy_set_header Upgrade $http_upgrade;
+       proxy_set_header Connection 'upgrade';
+       proxy_set_header Host $host;
+       proxy_cache_bypass $http_upgrade;
+    }
+}
+
+save this 
+
+
+then create a symbolic link
+
+cd ..
+
+/etc/nginx
+
+cd sites-available  ls
+
+default and mytravplan.com  domain_name 
+
+cd ../sites-enabled/  ls
+
+default ---- skyblue color
+
+cd ..
+
+then paste this command line 
+
+sudo ln -s /etc/nginx/sites-available/mytravplan.com /etc/nginx/sites-enabled/mytravplan.com
+
+cd sites-available  ls
+
+
+link created
+
+default  mytravplan.com both
+
+cd ..
+
+/etc/nginx ls
+
+nginx.conf
+
+
+
+check is all correct or not
+paste this command
+sudo nginx -t
+
+
+go to project name 
+
+cd ~/project_folder_name  ls to se all thn install npm  to run
+
+npm install
+
+
+then run this command ----
+
+ npm run build 
+
+
+
+after this create a pm2 config file to your project --- current
+
+nano ecosystem.config.js
+
+
+add this 
+
+module.exports = {
+  apps : [
+      {
+        name: "myapp",
+        script: "npm start",
+        port: 3001
+      }
+  ]
+}
+
+ctrl + 0 and then x
+ctrl+x,ctrl+x
+
+then restart nginx server to use below command
+
+sudo service nginx restart
+
+then start the server to use this command
+
+----pm2 start ecosystem.config.js  its starts the scripts npm start
+
+
+then save this
+
+---- pm2 save to restart and run   this is neccessary
+
+and check status 
+
+--- pm2 status
+
+active and inactive
+
+
+ to check the project on live press f5 key
+
+
+---- push local changes to remote server and in remote take pull git pull and enter and the num, run build
+
+
+after that reload the app
+
+using
+
+----  pm2 reload app_name/id
+
+to reflect your changes on the live take git pull and npm run build and start the server
+
+
+this process only if 
+
+
+
+
+
+
+
+
+------------  copy files to local to live server ------------------
+
+
+use this command
+scp -P 22 -i ~/.ssh/id_rsa my-trip-json-files.zip root@82.112.231.185:
+apt install unzip
+unzip  my-trip-json-files.zip
+
+
+delete folder
+
+sudo rm -rf -r my-trip-json-files.zip
+
+
+
+import mongodb json files to diff dv
+
+mongoimport "./my-trip-json-files/trip-plan.footer_contents.json" -d trip-plan -c footer_contents --jsonArray --drop
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------- automation with git action next js project -------------------------
+
+steps here
+
+change--->push---pull
+
+
+to create a folder then filename
+.scripts/deploy.sh
+
+
+th paste this
+
+#!/bin/bash
+set -e
+
+echo "Deployment started..."
+
+# Pull the latest version of the app
+git pull origin master
+echo "New changes copied to server !"
+
+echo "Installing Dependencies..."
+npm install --yes
+
+echo "Creating Production Build..."
+npm run build
+
+echo "PM2 Reload"
+pm2 reload app_name/id
+
+echo "Deployment Finished!"
+
+
+thn set the permission for .script/deploy.sh file
+git update-index --add --chmod=+x deploy.sh  check this with A
+
+
+then create a folder -->folder-- filename extention yml
+.github/workflows/deploy.yml
+
+then paste this command 
+name: Deploy
+
+# Trigger the workflow on push and
+# pull request events on the master branch
+on:
+  push:
+    branches: ["main"] bases on the github branch
+  pull_request:
+    branches: ["main"]
+
+# Authenticate to the the server via ssh
+# and run our deployment script
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master -- here check this version on the web browser  https://github.com/appleboy/ssh-action/releases
+        with:
+          host: ${{ secrets.HOST }}  add host
+          username: ${{ secrets.USERNAME }}  add username of the server IP
+          port: ${{ secrets.PORT }} add port POST
+          key: ${{ secrets.SSHKEY }} add private ssh key  
+          script: "cd ~/project_folder_name && ./.scripts/deploy.sh"  add here server project name 
+
+
+
+
+to check username with "whoami" to check server username
+
+git hub -- settings --secrets-variables ---actions
+
+secrets tabs--
+add variables-- like HOST POST SSHKEY USERNAME all should be the same above yml file
+new respository secret--
+
+get ssh keys from server
+
+.ssh-- ls
+
+in root paste this command to generate key
+
+ssh-keygen -f /root/.ssh/gitaction_ed25519 -t ed25519 -C "gitactionautodep"
+
+enter --- ----
+
+then get public and private key
+
+.ssh -- ls
+
+in .ssh paste 
+cat  gitaction_ed25519.pub
+
+then copy this key  in .ssh folder 
+ 
+open this  --- nano authorized_keys file
+
+and press end key then enter enter home kyes and paste the public key you generated and thn save and exit
+
+
+
+
+then  generate a private key 
+
+.ssh add this command
+
+cat gitaction_ed25519
+
+after generate key copy this key to add this in git action 
+copy like this
+-------stats-----
+<key>
+--------end-------
+
+SSHKEY variable
+
+
+
+save thn git command git status,add,commit,push  to check this on actions 
+
+
+if found this error on the action on the git 
+
+======CMD======
+cd /***/travel/mytourtravelplan
+./scripts/deploy.sh
+
+======END======
+out: Deployment started...
+err: fatal: couldn't find remote ref master
+2024/09/03 08:14:08 Process exited with status 1
+
+
+then to server and open the project and take pull there at one time and the deployment will be automated  ls -a to check all dir to our project
+
+if red symbol to see the error
+if green symbol its done to automated
